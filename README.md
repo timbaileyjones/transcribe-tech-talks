@@ -79,7 +79,7 @@ The mu pipeline looks like this:
 
 Once the pipeline stacks are complete, you can watch the CodePipeline execute. The CodePipeline/CodeDeploy/CodeBuild services start building your software within a few moments.
 
-When your pipeline reaches the Deploy stage, the **CodeDeploy service creates Infrastructure stacks for each Environment**, and will update it with each subsequent build.  This is another core concept in DevOps known as [infrastructure-as-code](https://stelligent.com/2017/06/29/devops-benefits-of-infrastructure-as-code/), and is fully implemented by `mu pipeline`.   
+When your pipeline reaches the Deploy stage, the **CodeDeploy service creates Infrastructure stacks for each Environment**, and will update them with each subsequent build.  This is another core concept in DevOps known as [infrastructure-as-code](https://stelligent.com/2017/06/29/devops-benefits-of-infrastructure-as-code/), and is fully implemented by `mu pipeline`.   
 
 The additional environment stacks look like this:
 
