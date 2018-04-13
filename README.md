@@ -82,6 +82,27 @@ This means that if you want to change your infrastructure (AutoScaling parameter
 
 ## `mu.yml`
 
+```yaml {.line-numbers}
+namespace: min-ec2
+environments:
+- name: acceptance
+  provider: ec2
+- name: production
+  provider: ec2
+
+service:
+  name: min-ec2
+  port: 8080
+  healthEndpoint: /
+  pathPatterns:
+  - /*
+  pipeline:
+    source:
+      provider: GitHub
+      repo: timbaileyjones/mu-minimal-ec2
+```
+
+
 Naturally, this example of [`mu`](https://github.com/stelligent/mu) usage starts with a [`mu.yml`](https://github.com/timbaileyjones/mu-minimal-ec2/blob/master/mu.yml).
 There are two sections: one for `environments`, and one for `service`s.
 
