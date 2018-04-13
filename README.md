@@ -197,7 +197,7 @@ The [`appspec.yml`](https://github.com/timbaileyjones/mu-minimal-ec2/blob/master
 
 ## `./codedeploy` directory
 
- * [`codedeploy/remove_previous_install.sh`]) removes /home/ec2-user/hello/hello.py and /etc/init/mu-minimal-ec2.conf. 
+ * `codedeploy/remove_previous_install.sh` removes /home/ec2-user/hello/hello.py and /etc/init/mu-minimal-ec2.conf. 
 
 ```bash
     1	#!/bin/bash -xe
@@ -205,7 +205,7 @@ The [`appspec.yml`](https://github.com/timbaileyjones/mu-minimal-ec2/blob/master
     3	exit 0
 ```
 
- * [`codedeploy/start_server.sh`] - tells upstart to start the service.
+ * `codedeploy/start_server.sh` tells upstart to start the service.
 ```bash
     1	#!/bin/bash -x
     2	set +e
@@ -213,7 +213,7 @@ The [`appspec.yml`](https://github.com/timbaileyjones/mu-minimal-ec2/blob/master
     4	start mu-minimal-ec2
     5	exit 0
 ```
- * [`codedeploy/stop_server.sh`] tells `upstart` to stop the service. 
+ * `codedeploy/stop_server.sh` tells `upstart` to stop the service. 
 ```bash
     1	#!/bin/bash -xe
     2	stop mu-minimal-ec2
