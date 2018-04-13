@@ -83,23 +83,23 @@ This means that if you want to change your infrastructure (AutoScaling parameter
 ## `mu.yml`
 
 ```yaml {.line-numbers}
-namespace: min-ec2
-environments:
-- name: acceptance
-  provider: ec2
-- name: production
-  provider: ec2
-
-service:
-  name: min-ec2
-  port: 8080
-  healthEndpoint: /
-  pathPatterns:
-  - /*
-  pipeline:
-    source:
-      provider: GitHub
-      repo: timbaileyjones/mu-minimal-ec2
+ 1    namespace: min-ec2
+ 2    environments:
+ 3    - name: acceptance
+ 4      provider: ec2
+ 5    - name: production
+ 6     provider: ec2
+ 7
+ 8    service:
+ 9     name: min-ec2
+10    port: 8080
+11     healthEndpoint: /
+12     pathPatterns:
+13     - /*
+14     pipeline:
+15       source:
+16         provider: GitHub
+17         repo: timbaileyjones/mu-minimal-ec2
 ```
 
 
