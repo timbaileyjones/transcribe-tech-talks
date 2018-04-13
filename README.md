@@ -116,6 +116,19 @@ To learn more about configuring `mu` services, refer to the [wiki page for Mu Se
 
 ## `buildspec.yml`
 
+```yaml
+ 1 version: 0.2
+ 2 
+ 3 phases:
+ 4   build:
+ 5     commands:
+ 6       - pip install Flask
+ 7 
+ 8 artifacts:
+ 9   files:
+10    - "**/*"
+```
+
 [`mu`](https://github.com/stelligent/mu)  uses AWS CodePipeline, CodeBuild, and CodeDeploy to turn your github repo into a deployed service.  The [buildspec.yml](https://github.com/timbaileyjones/mu-minimal-ec2/blob/master/buildspec.yml) contains instructions (lines 3-6), on how to install prerequisites, how to invoke the build, do any postprocessing (minification, compression, archiving, etc).  
 TODO - insert snippet
 
@@ -125,24 +138,70 @@ You can (and should) also use buildspec.yml to run unit tests.  Make sure all yo
 
 ## `hello.py`
 
+```python
+ 1  from flask import Flask
+ 2  app = Flask(__name__)
+ 3 
+ 4  @app.route("/")
+ 5  def hello():
+ 6     return "Mu minimal ec2 example, v2!\n" 
+```
+
 In this example repo, we have included the smallest possible [Flask](http://flask.pocoo.org/) application possible, predictably named [hello.py](https://github.com/timbaileyjones/mu-minimal-ec2/blob/master/hello.py).  It listens on a port number, and responds to incoming `GET /` requests with a hardcoded string.
 
 So, now we just needs to tell the system how to install it, start it, and stop this service.
 
 ## appspec.yml 
 
+```yaml
+ 1    version: 0.0
+ 2    os: linux
+ 3    files:
+ 4     - source: ./hello.py
+ 5       destination: /home/ec2-home/hello/
+ 6     - source: ./etc/init/mu-minimal-ec2.conf 
+ 7       destination: /etc/init/
+ 8 
+ 9    hooks:
+10     BeforeInstall:
+11       - location: codedeploy/remove_previous_install.sh
+12         timeout: 30
+13     ApplicationStop:
+14       - location: codedeploy/stop_server.sh
+15         timeout: 30
+16     ApplicationStart:
+17       - location: codedeploy/start_server.sh
+18         timeout: 30
+```
+
 The [`appspec.yml`](https://github.com/timbaileyjones/mu-minimal-ec2/blob/master/appspec.yml)  file contains the commands that install, start and stop the service.  
  * The `files` section tells the system  which files to move, and where they should reside.
  * There are `hooks` section, with hooks called `BeforeInstall` (line 8), `ApplicationStop` (line 11), and `ApplicationStart` (line 14).  Each hook has a script location and a timeout in seconds.  These scripts reside in a `codedeploy` directory, primarily to keep the root directory a little cleaner.
 
-## ./codedeploy directory
+## `./codedeploy` directory
 
- * [`codedeploy/remove_previous_install.sh`](https://github.com/timbaileyjones/mu-minimal-ec2/blob/master/codedeploy/install_server.sh) removes /home/ec2-user/hello/hello.py and /etc/init/mu-minimal-ec2.conf.
-TODO - insert snippet
- * [`codedeploy/start_server.sh`](https://github.com/timbaileyjones/mu-minimal-ec2/blob/master/codedeploy/start_server.sh) tells `upstart` to start the service
-TODO - insert snippet
- * [`codedeploy/stop_server.sh`](https://github.com/timbaileyjones/mu-minimal-ec2/blob/master/codedeploy/stop_server.sh) is also easy.  It tells `upstart` to stop the service.
-TODO - insert snippet
+ * [`codedeploy/remove_previous_install.sh`]) removes /home/ec2-user/hello/hello.py and /etc/init/mu-minimal-ec2.conf. 
+
+```bash
+    1	#!/bin/bash -xe
+    2	/bin/rm -rf /home/ec2-home/hello* /etc/init/mu-minimal-ec2.conf
+    3	exit 0
+```
+
+ * [`codedeploy/start_server.sh`] - tells upstart to start the service.
+```bash
+    1	#!/bin/bash -x
+    2	set +e
+    3	stop mu-minimal-ec2
+    4	start mu-minimal-ec2
+    5	exit 0
+```
+ * [`codedeploy/stop_server.sh`] tells `upstart` to stop the service. 
+```bash
+    1	#!/bin/bash -xe
+    2	stop mu-minimal-ec2
+    3	exit 0
+```
 
 # Use your new application
 
