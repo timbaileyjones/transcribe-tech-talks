@@ -32,49 +32,66 @@ There are other mu-related pages about deploying Microservices to [AWS ECS](http
   * AWS Access keys set up in $HOME/.aws 
 
 # Instructions
+
+## Make your own repository
   * Fork this repository in github.
-  * Clone your forked repository: 
+  * Clone your forked repository to your workstation:  
 
     `git clone git@github.com:<your-github-name>/mu-minimal-ec2.git`
 
-  * `cd` to the newly cloned directory
+  * Go to the newly cloned directory
+    `cd mu-minimal-ec2`
   * Edit the `repo:` line 17 of `mu.yml`, to match your new repository's URL.
   * Commit and push your changes
-  * `git commit -a -m "modify the repo: attribute in mu.yml" && git push`
-  * `mu pipeline up -t <your-github-token>`
+    ```bash
+    git commit -a -m "modify the repo: attribute in mu.yml" 
+    git push 
+    ```
+  * Create the mu pipeline
+    `mu pipeline up -t <your-github-token>`
 
-    This tells `mu` to create the CloudFormation stacks for the CodePipeline, CodeBuild and CodeDeploy services.  The resulting pipeline looks like this:
+## Walkthrough of the mu pipeline
 
-    * Source – the CodeBuild service retrieves a copy of your source code from GitHub or AWS CodeCommit. 
-    * Build - your software is built, tested, packaged according to instructions in your repo's buildspec.yml file. This uses AWS CodeBuild.
-    * Deploy to Acceptance - a new environment called "acceptance" is created (or updated) with your software.  This uses AWS CodeDeploy.
-    * Deploy to Production - after the one-and-only manual step, which is to offer Red and Green buttons to stop the pipeline, or deploy the software that is in Acceptance to the last environment, which is Production. This also uses AWS CodeDeploy.
+The `mu pipeline up` command creates the CloudFormation stacks for the CodePipeline, CodeBuild and CodeDeploy services.  
+    
+Navigate to the CloudFormation console, and watch the pipeline stacks form.  They'll look something like this:
 
-TODO - show screenshot having just the `mu pipeline` stacks.
-
-  * Navigate to the CloudFormation console, and watch the stacks form.  They'll look something like this:
-
- <a style='margin-left: 4em;' href="./blog-images/min-ec2-stacks.png">
- <img src="./blog-images/min-ec2-stacks.png"></img>
+ <a style='margin-left: 4em;' href="./blog-images/min-pipeline-stacks.png">
+ <img src="./blog-images/min-pipeline-stacks.png"></img>
  </a>
 
-* (optional) Once the stacks are complete, you can watch the CodePipeline execute.
+Once the pipeline stacks are created, open the CodePipeline console. You should have one pipeline listed. Click on it.
 
  <a style='margin-left: 4em;' href="./blog-images/pipeline-list.png">
  <img src="./blog-images/pipeline-list.png"></img>
  </a>
 
- * (optional) Clicking on the pipeline above will show you the stages of the pipeline.
+The mu pipeline looks like this:
+
+  * Source – the CodeBuild service retrieves a copy of your source code from GitHub or AWS CodeCommit. 
+  * Build - your software is built, tested, packaged according to instructions in your repo's buildspec.yml file. This uses AWS CodeBuild.
+  * Deploy to Acceptance - a new environment called "acceptance" is created (or updated) with your software.  This uses AWS CodeDeploy.
+  * Deploy to Production - after the one-and-only manual step, which is to offer Red and Green buttons to stop the pipeline, or deploy the software that is in Acceptance to the last environment, which is Production. This also uses AWS CodeDeploy. 
 
  <a style='margin-left: 4em;' href="./blog-images/pipeline-detail.png">
  <img src="./blog-images/pipeline-detail.png"></img>
  </a>
 
-In particular, the **Deploy stages of the pipeline actually creates and updates the Infrastructure**.  This is another core concept in DevOps known as [infrastructure-as-code](https://stelligent.com/2017/06/29/devops-benefits-of-infrastructure-as-code/), and is fully implemented by `mu pipeline`.  The infrastructure in this example includes:
+Once the pipeline stacks are complete, you can watch the CodePipeline execute. The CodePipeline/CodeDeploy/CodeBuild services start building your software within a few moments.
+
+When your pipeline reaches the Deploy stage, the **CodeDeploy service creates Infrastructure stacks for each Environment**, and will update it with each subsequent build.  This is another core concept in DevOps known as [infrastructure-as-code](https://stelligent.com/2017/06/29/devops-benefits-of-infrastructure-as-code/), and is fully implemented by `mu pipeline`.   
+
+The additional environment stacks look like this:
+
+ <a style='margin-left: 4em;' href="./blog-images/min-env-stacks.png">
+ <img src="./blog-images/min-env-stacks.png"></img>
+ </a>
+
+The infrastructure created by these additional stacks include:
   * networking: VPC, subnets, security groups
   * compute: EC2 instances (alternatively, ECS and Fargate are also supported in [`mu`](https://github.com/stelligent/mu))
   * storage: S3 buckets supporting the build artifacts
-  * resiliency: AutoScaling groups and the Elastic Load Balancer definitions come with [`mu`](https://github.com/stelligent/mu) by default.
+  * resiliency: AutoScaling groups and the Elastic Load Balancer definitions come with [`mu`](https://github.com/stelligent/mu) by default. 
 
 This means that if you want to change your infrastructure (AutoScaling parameters, your EC2 or RDS instance sizes, etc), you can implement those changes the same way you do your code changes:  Change a file, run `git add`, `git commit`, and `git push`!  
 
@@ -207,7 +224,7 @@ The [`appspec.yml`](https://github.com/timbaileyjones/mu-minimal-ec2/blob/master
 
 Use `mu env show acceptance` to display key information about your app.  One of the attributes is the ELB endpoint.  
 
- <a style='margin-left: 4em;' href="./blog-images/min-ec2-stacks.png">
+ <a style='margin-left: 4em;' href="./blog-images/min-mu-env.png">
  <img src="./blog-images/run-mu-env.png"></img>
  </a>
 
