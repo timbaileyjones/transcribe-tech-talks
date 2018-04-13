@@ -38,9 +38,9 @@ There are other mu-related pages about deploying Microservices to [AWS ECS](http
     `git clone git@github.com:<your-github-name>/mu-minimal-ec2.git`
 
   * `cd` to the newly cloned directory
-  * If you want to make any changes, prior to your first build, make them now.
+  * Edit the `repo:` line 17 of `mu.yml`, to match your new repository's URL.
   * Commit and push your changes
-  * `git commit -a -m "changes" && git push`
+  * `git commit -a -m "modify the repo: attribute in mu.yml" && git push`
   * `mu pipeline up -t <your-github-token>`
 
     This tells `mu` to create the CloudFormation stacks for the CodePipeline, CodeBuild and CodeDeploy services.  The resulting pipeline looks like this:
@@ -106,11 +106,11 @@ This means that if you want to change your infrastructure (AutoScaling parameter
 Naturally, this example of [`mu`](https://github.com/stelligent/mu) usage starts with a [`mu.yml`](https://github.com/timbaileyjones/mu-minimal-ec2/blob/master/mu.yml).
 There are two sections: one for `environments`, and one for `service`s.
 
-The `environments:` section from lines 2 to 6, are a simple list of the environment `name`s you wish to have (acceptance, staging, sandbox, demo, production, whatever).  The `provider` value can have one of three different values (`ec2`, `ecs`, and `fargate`).  
+The `environments:` section from lines 2 to 6 (above), are a simple list of the environment `name`s you wish to have (acceptance, staging, sandbox, demo, production, whatever).  The `provider` value can have one of three different values (`ec2`, `ecs`, and `fargate`).  
 
 To learn more about other configuring `mu` environments, refer to the [wiki page for Mu Environments](https://github.com/stelligent/mu/wiki/Environments).
 
-The `services:` section is from line 8 to 17, and specifies just the bare necessities.  We're going to accept incoming connections on port 80, route them to our application on port 8080, checking the / endpoint for `200 OK` responses, and use the code in the `repo` specified on line 17.
+The `services:` section is from lines 8 to 17 (above), and specifies just the bare necessities.  We're going to accept incoming connections on port 80, route them to our application on port 8080, checking the / endpoint for `200 OK` responses, and use the code in the `repo` specified on line 17.
 
 To learn more about configuring `mu` services, refer to the [wiki page for Mu Services](https://github.com/stelligent/mu/wiki/Services)
 
