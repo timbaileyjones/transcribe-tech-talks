@@ -2,9 +2,6 @@ namespace: min-ec2
 environments:
 - name: acceptance
   provider: ec2
-  cluster:
-    #keyName: timba-labs # us-east-1
-    keyName: timbaileyjones-labs-keypair-ohio #us-east-2
 - name: production
   provider: ec2
 
