@@ -1,9 +1,9 @@
 version: 0.0
 os: linux
 files:
-  - source: ./hello.py
-    destination: /home/ec2-home/hello/
-  - source: ./etc/init/mu-minimal-ec2.conf 
+  - source: ./app
+    destination: /home/ec2-home/
+  - source: ./etc/init/transcribe-tech-talks.conf 
     destination: /etc/init/
 
 hooks:

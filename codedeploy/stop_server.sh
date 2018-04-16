@@ -1,3 +1,3 @@
 #!/bin/bash -xe
-stop mu-minimal-ec2
+stop transcribe-tech-talks
 exit 0

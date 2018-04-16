@@ -1,3 +1,3 @@
 #!/bin/bash -xe
-/bin/rm -rf /home/ec2-home/hello* /etc/init/mu-minimal-ec2.conf
+/bin/rm -rf /home/ec2-home/app /etc/init/transcribe-tech-talks conf
 exit 0

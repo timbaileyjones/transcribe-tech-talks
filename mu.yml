@@ -14,4 +14,4 @@ service:
   pipeline:
     source:
       provider: GitHub
-      repo: timbaileyjones/mu-minimal-ec2
+      repo: timbaileyjones/transcribe-tech-talks
