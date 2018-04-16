@@ -1,4 +1,4 @@
-namespace: min-ec2
+namespace: timba
 environments:
 - name: acceptance
   provider: ec2
