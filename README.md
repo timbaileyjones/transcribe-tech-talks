@@ -3,15 +3,28 @@
 
 # Continuous Delivery for Microservices on EC2 with `mu`
 
-[Stelligent mu](http://getmu.io/) is a great open source tool to deploy Microservices to the AWS cloud.  It has three modes of deployment: 
 
-  * AWS ECS (Elastic Container Service, where the containers are Docker).
-  * AWS Fargate (A simpler “serverless” version of ECS)
-  * AWS EC2 instances without Docker containers.
 
-There are other mu-related pages about deploying Microservices to [AWS ECS](https://stelligent.com/2017/09/26/application-auto-scaling-with-amazon-ecs/) and [AWS Fargate](https://github.com/stelligent/mu/blob/develop/examples/ecs-fargate/mu.yml#L5).  If you decide ECS and Fargate are not suitable for your application, this page will show you how to deploy mu projects directly to EC2 instances.
 
-[This repository](https://github.com/timbaileyjones/mu-minimal-ec2) is a sample project showing how to deploy a standalone webapp to EC2 using mu. The web app in this case is the smallest possible Flask application.   You can use this to deploy other applications that include their own webservers.  NodeJS with Express, Ruby with puma/thin/passenger, Jetty or even Spring Boot.
+
+Learn how to deploy a webapp to AWS EC2 using mu. If you want to get into microservices, but aren't ready to take the container plunge, you can deploy mu projects directly to AWS EC2 instances.  Using mu's EC2 mode, you can leverage the benefits of microservices without containerization,  and speed up development feedback loops.
+
+The web app in this article is the smallest possible Flask application. You can adapt this example to deploy other applications that include their own web servers, like Django, NodeJS with Express, Ruby with puma/thin/passenger, Jetty or even Spring Boot.
+
+[Stelligent mu](http://getmu.io) is a great open source tool to deploy Microservices to t]he AWS cloud. It has three modes of deployment:
+
+	* AWS ECS - (Elastic Container Service, which runs Docker containers on EC2).</li>
+	* AWS Fargate - (A simpler “serverless” version of ECS)</li>
+	* AWS EC2 instances without Docker containers.  This is the mode we're covering in this article.</li>
+
+In this blog post, we're going to:
+	* Fork this example repository on Github.com</li>
+	* Change the mu.yml to point to your fork</li>
+	* Create the mu pipeline</li>
+	* Walk through the resources <code>mu</code> creates for you, and</li>
+	* Explain the role each file plays in deploying the app.</li>
+
+
 
 # Technologies used
 
@@ -34,7 +47,7 @@ There are other mu-related pages about deploying Microservices to [AWS ECS](http
 # Instructions
 
 ## Make your own repository
-  * Fork this repository in github.
+  * Fork [this repository](https://github.com/timbaileyjones/mu-minimal-ec2) in github.
   * Clone your forked repository to your workstation:  
 
     `git clone git@github.com:<your-github-name>/mu-minimal-ec2.git`
@@ -147,7 +160,6 @@ To learn more about configuring `mu` services, refer to the [wiki page for Mu Se
 ```
 
 [`mu`](https://github.com/stelligent/mu)  uses AWS CodePipeline, CodeBuild, and CodeDeploy to turn your github repo into a deployed service.  The [buildspec.yml](https://github.com/timbaileyjones/mu-minimal-ec2/blob/master/buildspec.yml) contains instructions (lines 3-6), on how to install prerequisites, how to invoke the build, do any postprocessing (minification, compression, archiving, etc).  
-TODO - insert snippet
 
 Finally, you specify what files are to be deployed via the `artifacts/files:` section from line 8 to 10.
 
