@@ -6,7 +6,7 @@ environments:
   provider: ec2
 
 service:
-  name: min-ec2
+  name: transcribe
   port: 8080
   healthEndpoint: /
   pathPatterns:
