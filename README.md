@@ -47,7 +47,7 @@ In this blog post, we're going to:
 # Instructions
 
 ## Make your own repository
-  * Fork [this repository](https://github.com/timbaileyjones/mu-minimal-ec2) in github.
+  * Fork [this repository](https://github.com/stelligent/mu-minimal-ec2) in github.
   * Clone your forked repository to your workstation:  
 
     `git clone git@github.com:<your-github-name>/mu-minimal-ec2.git`
@@ -129,11 +129,11 @@ This means that if you want to change your infrastructure (AutoScaling parameter
 14     pipeline:
 15       source:
 16         provider: GitHub
-17         repo: timbaileyjones/mu-minimal-ec2
+17         repo: stelligent/mu-minimal-ec2
 ```
 
 
-Naturally, this example of [`mu`](https://github.com/stelligent/mu) usage starts with a [`mu.yml`](https://github.com/timbaileyjones/mu-minimal-ec2/blob/master/mu.yml).
+Naturally, this example of [`mu`](https://github.com/stelligent/mu) usage starts with a [`mu.yml`](https://github.com/stelligent/mu-minimal-ec2/blob/master/mu.yml).
 There are two sections: one for `environments`, and one for `service`s.
 
 The `environments:` section from lines 2 to 6 (above), are a simple list of the environment `name`s you wish to have (acceptance, staging, sandbox, demo, production, whatever).  The `provider` value can have one of three different values (`ec2`, `ecs`, and `fargate`).  
@@ -159,7 +159,7 @@ To learn more about configuring `mu` services, refer to the [wiki page for Mu Se
 10    - "**/*"
 ```
 
-[`mu`](https://github.com/stelligent/mu)  uses AWS CodePipeline, CodeBuild, and CodeDeploy to turn your github repo into a deployed service.  The [buildspec.yml](https://github.com/timbaileyjones/mu-minimal-ec2/blob/master/buildspec.yml) contains instructions (lines 3-6), on how to install prerequisites, how to invoke the build, do any postprocessing (minification, compression, archiving, etc).  
+[`mu`](https://github.com/stelligent/mu)  uses AWS CodePipeline, CodeBuild, and CodeDeploy to turn your github repo into a deployed service.  The [buildspec.yml](https://github.com/stelligent/mu-minimal-ec2/blob/master/buildspec.yml) contains instructions (lines 3-6), on how to install prerequisites, how to invoke the build, do any postprocessing (minification, compression, archiving, etc).  
 
 Finally, you specify what files are to be deployed via the `artifacts/files:` section from line 8 to 10.
 
@@ -176,7 +176,7 @@ You can (and should) also use buildspec.yml to run unit tests.  Make sure all yo
  6     return "Mu minimal ec2 example, v2!\n" 
 ```
 
-In this example repo, we have included the smallest possible [Flask](http://flask.pocoo.org/) application possible, predictably named [hello.py](https://github.com/timbaileyjones/mu-minimal-ec2/blob/master/hello.py).  It listens on a port number, and responds to incoming `GET /` requests with a hardcoded string.
+In this example repo, we have included the smallest possible [Flask](http://flask.pocoo.org/) application possible, predictably named [hello.py](https://github.com/stelligent/mu-minimal-ec2/blob/master/hello.py).  It listens on a port number, and responds to incoming `GET /` requests with a hardcoded string.
 
 So, now we just needs to tell the system how to install it, start it, and stop this service.
 
@@ -203,7 +203,7 @@ So, now we just needs to tell the system how to install it, start it, and stop t
 18         timeout: 30
 ```
 
-The [`appspec.yml`](https://github.com/timbaileyjones/mu-minimal-ec2/blob/master/appspec.yml)  file contains the commands that install, start and stop the service.  
+The [`appspec.yml`](https://github.com/stelligent/mu-minimal-ec2/blob/master/appspec.yml)  file contains the commands that install, start and stop the service.  
  * The `files` section tells the system  which files to move, and where they should reside.
  * There are `hooks` section, with hooks called `BeforeInstall` (line 8), `ApplicationStop` (line 11), and `ApplicationStart` (line 14).  Each hook has a script location and a timeout in seconds.  These scripts reside in a `codedeploy` directory, primarily to keep the root directory a little cleaner.
 
