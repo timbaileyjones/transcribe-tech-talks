@@ -2,8 +2,12 @@ namespace: min-ec2
 environments:
 - name: acceptance
   provider: ec2
+  cluster:
+    keyName: deep-security
 - name: production
   provider: ec2
+  cluster:
+    keyName: deep-security
 
 service:
   name: min-ec2
